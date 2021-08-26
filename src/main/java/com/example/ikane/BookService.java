@@ -2,6 +2,8 @@ package com.example.ikane;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
 
@@ -20,5 +22,9 @@ public class BookService {
         book = this.bookRepository.save(book);
 
         return book.getId();
+    }
+
+    public List<Book> findAll() {
+        return this.bookRepository.findAll();
     }
 }
