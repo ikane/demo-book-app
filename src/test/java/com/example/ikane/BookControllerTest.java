@@ -80,6 +80,29 @@ class BookControllerTest {
         ;
     }
 
+    @Test
+    void shouldFindBookById() throws Exception {
+        when(this.bookService.findById(1L)).thenReturn(createBook(1L, "Java 11", "Duke", "1233"));
+
+        this.mockMvc.perform(get("/api/books/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("Java 11")))
+                .andExpect(jsonPath("$.author", is("Duke")))
+                .andExpect(jsonPath("$.isbn", is("1233")))
+        ;
+    }
+
+    @Test
+    void shouldReturnNotFoundForUnknownBook() throws Exception {
+        when(this.bookService.findById(1L)).thenThrow(new BookNotFoundException("Book not found"));
+
+        this.mockMvc.perform(get("/api/books/1"))
+                .andExpect(status().isNotFound())
+        ;
+    }
+
     private Book createBook(long id, String title, String author, String isbn) {
         Book book = new Book();
 
